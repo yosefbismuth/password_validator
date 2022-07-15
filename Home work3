@@ -1,0 +1,81 @@
+class Date:
+    def __init__(self, day, month, year):
+        self.day = day
+        self.month = month
+        self.year = year
+
+    def is_valid(self):
+        if isinstance(self.day, int) and isinstance(self.month, int) and isinstance(self.year, int):
+            if self.day >= 1 and self.day <= 31 and self.month >= 1 and self.month <= 12 and self.year >= 1:
+                if self.month == 1: return True
+                if self.month == 2:
+                    if self.is_leap():
+                        return self.day <= 29
+                    return self.day <= 28
+                if self.month == 3: return True
+                if self.month == 4: return self.day <= 30
+                if self.month == 5: return True
+                if self.month == 6: return self.day <= 30
+                if self.month == 7: return True
+                if self.month == 8: return True
+                if self.month == 9: return self.day <= 30
+                if self.month == 10: return True
+                if self.month == 11: return self.day <= 30
+                if self.month == 12: return True
+            return False
+
+    def is_leap(self):
+        if self.year % 4 == 0:
+            return True
+        return False
+
+    def get_next_day(self):
+        if Date(self.day + 1, self.month, self.year).is_valid():
+            return Date(self.day + 1, self.month, self.year)
+        elif Date(1, self.month + 1, self.year).is_valid():
+            return Date(1, self.month + 1, self.year)
+        return Date(1, 1, self.year + 1)
+
+    def get_next_days(self, num_days):
+        date = Date(self.day, self.month, self.year)
+        for day in range(num_days):
+            date = date.get_next_day()
+        return date
+
+    def __str__(self):
+        return str(self.day) + "." + str(self.month) + "." + str(self.year)
+
+    def __eq__(self, other_date):
+        if self.day == other_date.day and self.month == other_date.month and self.year == other_date.year:
+            return True
+        return False
+
+    def __gt__(self, other_date):
+        if self.year > other_date.year:
+            return True
+        elif self.month > other_date.month and self.year == other_date.year:
+            return True
+        elif self.day > other_date.day and self.month == other_date.month and self.year == other_date.year:
+            return True
+        return False
+
+    def __lt__(self, other_date):
+        if self.year < other_date.year:
+            return True
+        elif self.month < other_date.month and self.year == other_date.year:
+            return True
+        elif self.day < other_date.day and self.month == other_date.month and self.year == other_date.year:
+            return True
+        return False
+
+
+
+date = Date(28, 12, 2004)
+date2 = Date(13, 7, 2016)
+print(date)
+print(date2)
+print(date.is_valid())
+print(date.get_next_day())
+print(date.get_next_days(6))
+print(date < Date(8, 12, 2204))
+print(date)
