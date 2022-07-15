@@ -1,0 +1,71 @@
+import operator
+
+
+def split_male_female(data_set):
+    data_set= {}
+    data_set_females = []
+    data_set_males = []
+
+    for human in data_set:
+        if human["sex"] == "female":
+            data_set_females.append(human)
+        else:
+            data_set_males.append(human)
+
+    return data_set_females, data_set_males
+
+
+def find_median_average(data_set):
+    age_sum = 0
+    for human in data_set:
+        age_sum = age_sum + human["age"]
+
+    data_set.sort(key=operator.itemgetter('age'))
+    median = 0
+    if len(data_set) % 2 == 0:
+        median = (data_set[int(len(data_set) / 2 - 1)]["age"] + data_set[int(len(data_set) / 2)]["age"]) / 2
+    else:
+        median = data_set[int(len(data_set) / 2)]["age"]
+
+    return age_sum / len(data_set), median
+
+
+def print_values_above(data_set, num=0):
+    print("humens above " + str(num) + ": ")
+    for human in data_set:
+        if human["age"] > num:
+            print(human)
+
+
+if __name__ == "__main__":
+    data_set = []
+
+    num_people = input("how many people: ")
+    for people in range(int(num_people)):
+        human = {}
+        name = input("name: ")
+        sex = input("sex: ")
+        age = int(input("age: "))
+
+        human["name"] = name
+        human["sex"] = sex
+        human["age"] = age
+
+        while input("more field? ") == "yes":
+            field_name = input("field name: ")
+            field_value = input("field value: ")
+            human[field_name] = field_value
+        print()
+        data_set.append(human)
+
+    data_set_females, data_set_males = split_male_female(data_set)
+    print("males: " + str(data_set_males))
+    print("females: " + str(data_set_females))
+
+    print()
+    avg_age, median = find_median_average(data_set)
+    print("avg age " + str(avg_age))
+    print("median is " + str(median))
+
+    print()
+    print_values_above(data_set, 22)
